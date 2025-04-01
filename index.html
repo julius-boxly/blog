@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boxly Engineering: Building a Scalable Analytics Pipeline with Cube.js</title>
+    <!-- <meta http-equiv="refresh" content="0; url=https://www.youtube.com/watch?v=dQw4w9WgXcQ&autoplay=1&mute=1"> -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            position: relative;
+            overflow: hidden;
+        }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1;
+        }
+        h1 {
+            color: #333;
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        #date {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 2rem;
+            color: #0066cc;
+            margin-top: 1rem;
+            min-width: 200px;
+            display: inline-block;
+        }
+        .progress-container {
+            margin-top: 1.5rem;
+            width: 200px;
+            height: 4px;
+            background: #eee;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: #0066cc;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        #status {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+            min-height: 1.2em;
+        }
+        .connection-status {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #4CAF50;
+            border-radius: 50%;
+            margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .background-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: linear-gradient(#ddd 1px, transparent 1px),
+                            linear-gradient(90deg, #ddd 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.1;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-grid"></div>
+    <div class="connection-status">
+        <span class="status-dot"></span>
+        Connected
+    </div>
+    <div class="loading">
+        <h1>Days in Boxly</h1>
+        <div id="date">13 Jan 2025</div>
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+        <div id="status">Initializing analytics pipeline...</div>
+    </div>
+    <script>
+        const startDate = new Date('2025-01-13');
+        const endDate = new Date('2025-04-01');
+        const dateElement = document.getElementById('date');
+        const progressBar = document.querySelector('.progress-bar');
+        const statusElement = document.getElementById('status');
+        const pageLoadTime = Date.now();
+        const totalDuration = endDate - startDate;
+        const ANIMATION_DURATION = 5000; // 5 seconds
+        
+        const statusMessages = [
+            "Initializing analytics pipeline...",
+            "Loading data cubes...",
+            "Configuring metrics...",
+            "Preparing visualizations...",
+            "Almost ready..."
+        ];
+        
+        // Cubic easing function
+        function easeOutCubic(t) {
+            return 1 - Math.pow(1 - t, 3);
+        }
+        
+        function updateStatus(progress) {
+            const messageIndex = Math.floor(progress * statusMessages.length);
+            statusElement.textContent = statusMessages[messageIndex];
+        }
+        
+        function updateDate() {
+            const elapsed = Date.now() - pageLoadTime;
+            let progress = Math.min(elapsed / ANIMATION_DURATION, 1);
+            
+            // Apply easing function
+            progress = easeOutCubic(progress);
+            
+            // Update progress bar
+            progressBar.style.width = `${progress * 100}%`;
+            
+            // Update status message
+            updateStatus(progress);
+            
+            // Linear interpolation between dates
+            const currentDate = new Date(
+                startDate.getTime() + (progress * totalDuration)
+            );
+            
+            dateElement.textContent = currentDate.toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+            });
+            
+            if (progress < 1) {
+                requestAnimationFrame(updateDate);
+            } else {
+                // Redirect after animation completes
+                window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ&autoplay=1&mute=1';
+            }
+        }
+        
+        requestAnimationFrame(updateDate);
+    </script>
+</body>
+</html> 
