@@ -8,40 +8,172 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            position: relative;
         }
-        .container {
-            text-align: center;
+
+        /* Blog background elements */
+        .blog-header {
+            background: #fff;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1;
+        }
+
+        .blog-nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .blog-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .blog-nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .blog-nav-links a {
+            color: #666;
+            text-decoration: none;
+        }
+
+        .blog-content {
+            max-width: 800px;
+            margin: 6rem auto 2rem;
             padding: 2rem;
-            background: white;
+            background: #fff;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+
+        .blog-post {
+            margin-bottom: 2rem;
+        }
+
+        .blog-post h2 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .blog-post p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Blur effect */
+        .blog-header, .blog-content {
+            filter: blur(8px);
+            pointer-events: none;
+            transition: filter 0.5s ease-out;
+        }
+
+        .blog-header.blur, .blog-content.blur {
+            filter: blur(8px);
+        }
+
+        /* Counter overlay */
+        .counter-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .counter-overlay.show {
+            opacity: 1;
+        }
+
+        .container {
+            text-align: center;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(8px);
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .counter-overlay.show .container {
+            transform: scale(1);
+            opacity: 1;
+        }
+
         h1 {
             color: #333;
             margin: 0;
-            font-size: 1.5rem;
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
         }
+
         #date {
             font-family: 'Courier New', Courier, monospace;
-            font-size: 2rem;
+            font-size: 2.5rem;
             color: #0066cc;
-            margin-top: 1rem;
+            margin-top: 1.5rem;
             min-width: 200px;
             display: inline-block;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Days in Boxly</h1>
-        <div id="date">13 Jan 2025</div>
+    <!-- Blog background elements -->
+    <header class="blog-header">
+        <nav class="blog-nav">
+            <div class="blog-title">Boxly Engineering Blog</div>
+            <div class="blog-nav-links">
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#">Engineering</a>
+                <a href="#">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="blog-content">
+        <article class="blog-post">
+            <h2>Building a Scalable Analytics Pipeline with Cube.js</h2>
+            <p>At Boxly, we're constantly working on improving our data infrastructure. Today, we're excited to share our journey in building a scalable analytics pipeline using Cube.js...</p>
+        </article>
+        <article class="blog-post">
+            <h2>Best Practices for Data Visualization</h2>
+            <p>Data visualization is crucial for making informed decisions. In this post, we'll explore some of our favorite techniques and tools...</p>
+        </article>
+    </main>
+
+    <!-- Counter overlay -->
+    <div class="counter-overlay">
+        <div class="container">
+            <h1>Days in Boxly</h1>
+            <div id="date">13 Jan 2025</div>
+        </div>
     </div>
+
     <script>
         const startDate = new Date('2025-01-13');
         const endDate = new Date('2025-04-01');
@@ -51,6 +183,13 @@
         const ANIMATION_DURATION = 5000; // 5 seconds
         let confettiStarted = false;
         const jsConfetti = new JSConfetti();
+        
+        // Add blur effect after a delay
+        setTimeout(() => {
+            document.querySelector('.blog-header').classList.add('blur');
+            document.querySelector('.blog-content').classList.add('blur');
+            document.querySelector('.counter-overlay').classList.add('show');
+        }, 250);
         
         // Cubic easing function
         function easeOutCubic(t) {
@@ -91,6 +230,7 @@
                 // Wait 250ms then show alert
                 setTimeout(() => {
                     console.log('April Fools! 🎉');
+                    window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ&autoplay=1&mute=1';
                 }, 500);
             }
             
